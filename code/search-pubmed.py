@@ -4,6 +4,7 @@ import random
 import argparse
 import collections
 import numpy as np
+import json
 
 import torch
 import torch.utils
@@ -31,7 +32,7 @@ parser.add_argument('--evals', type=int, default=10, help='num of evals')
 parser.add_argument('--startLength', type=int, default=4, help='num of startArch')
 args = parser.parse_args()
 
-adj, features, labels, idx_train, idx_val, idx_test = load_data(path="../data", dataset='pubmed')
+adj, features, labels, idx_train, idx_val, idx_test = load_data(path="drive/MyDrive/GNN-NAS-Group10/data", dataset='pubmed')
 adj = aug_normalized_adjacency(adj)
 adj = sparse_mx_to_torch_sparse_tensor(adj).float().cuda()
 features = features.cuda()
@@ -49,6 +50,8 @@ class Model(object):
     self.arch = None
     self.val_acc = None
     self.test_acc = None
+    self.num_parameters = None
+    self.latency = None
     
   def __str__(self):
     """Prints a readable version of this bitstring."""
@@ -62,16 +65,21 @@ def main(cycles, population_size, sample_size):
     """Algorithm for regularized evolution (i.e. aging evolution)."""
     population = collections.deque()
     history = []  # Not used by the algorithm, only used to report results.
+    bench = {} # Stores model with performance metrics
     
     # Initialize the population with random models.
     while len(population) < population_size:
         model = Model()
         model.arch = random_architecture(args.startLength)
-        model.val_acc, model.test_acc = train_and_eval(args, model.arch, data, index)
+        model.val_acc, model.test_acc, model.num_parameters, model.latency = train_and_eval(args, model.arch, data, index)
         population.append(model)
         history.append(model)
+        bench[str(model.arch)] =  {"val_acc": model.val_acc, "test_acc": model.test_acc, 
+                            "num_parameters": model.num_parameters, "latency": model.latency}
         print(model.arch)
         print(model.val_acc, model.test_acc)
+        print(model.num_parameters)
+        print(model.latency)
     
     # Carry out evolution in cycles. Each cycle produces a model and removes another.
     while len(history) < cycles:
@@ -87,16 +95,24 @@ def main(cycles, population_size, sample_size):
         # Create the child model and store it.
         child = Model()
         child.arch = mutate_arch(parent.arch, np.random.randint(0, 3))
-        child.val_acc, child.test_acc = train_and_eval(args, child.arch, data, index)
+        child.val_acc, child.test_acc, child.num_parameters, child.latency = train_and_eval(args, child.arch, data, index)
         population.append(child)
         history.append(child)
+        bench[str(child.arch)] =  {"val_acc": child.val_acc, "test_acc": child.test_acc, 
+                            "num_parameters": child.num_parameters, "latency":child.latency}
         print(child.arch)
         print(child.val_acc, child.test_acc)
+        print(child.num_parameters)
+        print(child.latency)
+        
         
         # Remove the oldest model.
         population.popleft()
     
-    return history
+    return history, bench
 
 # store the search history
-h = main(500, 20, 3)
+h, bench = main(500, 20, 3)
+f = open("drive/MyDrive/GNN-NAS-Group10/data/cora_bench.txt", "w")
+f.write(json.dumps(bench))
+f.close()
