@@ -16,7 +16,7 @@ python path/to/repo/code/search-pubmed.py
 Output architectures and metrics will be printed to standard out as well as saved in cora_bench.txt and pubmed_bench.txt. The format of the output is as follows,
 
 Architecture  (0 -> T, 1 -> P)\
-Validation Accuracy, Test Accuracy\
+Validation_accuracy Test_accuracy\
 Number of Parameters\
 Latency
 
