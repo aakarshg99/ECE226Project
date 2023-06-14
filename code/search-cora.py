@@ -32,7 +32,7 @@ parser.add_argument('--evals', type=int, default=10, help='num of evals')
 parser.add_argument('--startLength', type=int, default=4, help='num of startArch')
 args = parser.parse_args()
 
-adj, features, labels, idx_train, idx_val, idx_test = load_data(path="drive/MyDrive/DFG_NAS/data", dataset='cora')
+adj, features, labels, idx_train, idx_val, idx_test = load_data(path="./../data", dataset='cora')
 adj = aug_normalized_adjacency(adj)
 adj = sparse_mx_to_torch_sparse_tensor(adj).float().cuda()
 features = features.cuda()
@@ -111,7 +111,7 @@ def main(cycles, population_size, sample_size):
     return history, bench
 
 # store the search history
-h, bench = main(10, 5, 3) #(500, 20, 3)
-f = open("drive/MyDrive/DFG_NAS/data/cora_bench.txt", "w")
+h, bench = main(100, 10, 3)
+f = open("./cora_bench.txt", "w")
 f.write(json.dumps(bench))
 f.close()

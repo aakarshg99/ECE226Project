@@ -18,7 +18,9 @@ def mutate_arch(parent_arch, mutate_type):
         child_arch.insert(position, 1)
     elif mutate_type == 0:
         position = random.randint(0, length)
-        child_arch.insert(position, 0)
+        element = 0
+        # element = random.choice([0,2]) # 0 for MLP, 2 for ANN
+        child_arch.insert(position, element)
     else:
         print('mutate type error')
     

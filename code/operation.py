@@ -29,10 +29,29 @@ class MLP(nn.Module):
         if not self.last:
             x = F.relu(x)
         return x
+    
+class ANN(nn.Module):
+    def __init__(self, nfeat, nhidden, nclass, dropout, last=False):
+        super(ANN, self).__init__()
+        self.dense1 = nn.Linear(nfeat, nhidden)
+        self.relu1 = nn.ReLU()
+        self.dense2 = nn.Linear(nhidden, nclass)
+        self.dropout = dropout
+        self.last = last
+    
+    def forward(self, x):
+        x = F.dropout(x, self.dropout, training=self.training)
+        x = self.dense1(x)
+        x = self.relu1(x)
+        x = self.dense2(x)
+        if not self.last:
+            x = F.relu(x)
+        return x
 
 class ModelOp(nn.Module):
     def __init__(self, arch, adj, feat_dim, hid_dim, num_classes, fdropout, dropout):
         super(ModelOp, self).__init__()
+        print("ABC ", feat_dim, hid_dim, num_classes)
         self._ops = nn.ModuleList()
         self._numP = 1
         self._arch = arch
@@ -42,6 +61,8 @@ class ModelOp(nn.Module):
                 self._numP += 1
             elif element == 0:
                 op = MLP(hid_dim, hid_dim, dropout)
+            elif element == 2:
+                op = ANN(hid_dim, hid_dim, num_classes, dropout=dropout)
             else:
                 print("arch element error")
             self._ops.append(op)
