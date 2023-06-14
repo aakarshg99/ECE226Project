@@ -2,7 +2,7 @@
 GNN-NAS Project
 
 ### How To Run
-Do to the large resource requirements of GNN-NAS you will need a GPU to run this project. Given that we have added a Jupyter Notebook file that can easily run the code by cloning the repo to your Google Drive and running from there. Steps to get it working,
+Due to the large resource requirements of GNN-NAS you will need a GPU to run this project. Given that we have added a Jupyter Notebook file that can easily run the code by cloning the repo to your Google Drive and running from there. Steps to get it working,
 * Download Run_From_Notebook.ipynb
 * Upload to Google Colab
 * Run the cells (You will need to sign in to your google account)
