@@ -115,7 +115,7 @@ def main(cycles, population_size, sample_size):
     return history, bench
 
 # store the search history
-h, bench = main(args.cycles, args.population_size, args.sample.size)
+h, bench = main(args.cycles, args.population_size, args.sample_size)
 f = open("drive/MyDrive/GNN-NAS-Group10/pubmed_bench.txt", "w")
 f.write(json.dumps(bench))
 f.close()
