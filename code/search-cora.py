@@ -111,7 +111,7 @@ def main(cycles, population_size, sample_size):
     return history, bench
 
 # store the search history
-h, bench = main(10, 5, 3) #(500, 20, 3)
-f = open("drive/MyDrive/GNN-NAS-Group10/data/cora_bench.txt", "w")
+h, bench = main(50, 10, 3) 
+f = open("drive/MyDrive/GNN-NAS-Group10/cora_bench.txt", "w")
 f.write(json.dumps(bench))
 f.close()
