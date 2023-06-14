@@ -51,7 +51,6 @@ class ANN(nn.Module):
 class ModelOp(nn.Module):
     def __init__(self, arch, adj, feat_dim, hid_dim, num_classes, fdropout, dropout):
         super(ModelOp, self).__init__()
-        print("ABC ", feat_dim, hid_dim, num_classes)
         self._ops = nn.ModuleList()
         self._numP = 1
         self._arch = arch
