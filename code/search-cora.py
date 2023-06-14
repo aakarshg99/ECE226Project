@@ -20,6 +20,9 @@ from operation import *
 from mutation import *
 
 parser = argparse.ArgumentParser("cora")
+parser.add_argument('cycles', type=int, default=50, help='Number of architecturees to create')
+parser.add_argument('population_size', type=int, default=10, help='Number of architectures held at any point in time')
+parser.add_argument('sample_size', type=int, default=3, help='Number of architectures to select from population, max val acc is then chosen')
 parser.add_argument('--seed', type=int, default=2, help='random seed')
 parser.add_argument('--gpu', type=int, default=1, help='gpu device id')
 parser.add_argument('--hiddim', type=int, default=128, help='hidden dims')
@@ -111,7 +114,7 @@ def main(cycles, population_size, sample_size):
     return history, bench
 
 # store the search history
-h, bench = main(50, 10, 3) 
+h, bench = main(args.cycles, args.population_size, args.sample_size) 
 f = open("drive/MyDrive/GNN-NAS-Group10/cora_bench.txt", "w")
 f.write(json.dumps(bench))
 f.close()
