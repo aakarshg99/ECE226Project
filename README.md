@@ -12,6 +12,14 @@ python path/to/repo/code/search-cora.py
 and for the pubmed dataset,
 python path/to/repo/code/search-pubmed.py
 
+### Output
+Output architectures and metrics will be printed to standard out as well as saved in cora_bench.txt and pubmed_bench.txt. The format of the output is as follows,
+
+Architecture  (0 -> T, 1 -> P)
+Validation Accuracy, Test Accuracy
+Number of Parameters
+Latency
+
 
 ### Troubleshooting
 If you have any path issues for the dataset then alter the path on line 35 of search_cora.py/search_pubmed.py accordingly. 
